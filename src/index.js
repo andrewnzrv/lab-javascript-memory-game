@@ -44,8 +44,20 @@ window.addEventListener('load', (event) => {
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
-      // TODO: write some code here
+      card.classList.add('turned');
+      memoryGame.pickedCards.push(card);
+      if (memoryGame.pickedCards.length === 2) {
+        if (memoryGame.checkIfPair(pickedCards[0], pickedCards[1]) === true) {
+          card.classList.add('blocked')
+        } else {
+          card.classList.remove('turned');
+        }
+        memoryGame.pickedCards.length = 0;
+       
+      }
+
       console.log(`Card clicked: ${card}`);
+
     });
   });
 });
