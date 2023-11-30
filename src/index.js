@@ -27,6 +27,8 @@ const cards = [
 
 const memoryGame = new MemoryGame(cards);
 
+memoryGame.shuffleCards();
+
 window.addEventListener('load', (event) => {
   let html = '';
   memoryGame.cards.forEach((pic) => {
@@ -50,8 +52,9 @@ window.addEventListener('load', (event) => {
       memoryGame.pickedCards.push(card);
 
       if (memoryGame.pickedCards.length === 2) {
-        memoryGame.pairsClicked++;
-        if (!memoryGame.checkIfPair(memoryGame.pickedCards[0].getAttribute('data-card-name'), memoryGame.pickedCards[1].getAttribute('data-card-name'))) {
+        if (!memoryGame.checkIfPair(
+          memoryGame.pickedCards[0].getAttribute('data-card-name'), 
+          memoryGame.pickedCards[1].getAttribute('data-card-name'))) {
           setTimeout(() => {
             memoryGame.pickedCards.forEach((card) => {
               card.classList.remove('turned');
@@ -59,17 +62,24 @@ window.addEventListener('load', (event) => {
             });
           }, 1000)
         } else {
-          memoryGame.pairsGuessed ++;
-          console.log('Pairs guessed: ' + memoryGame.pairsGuessed)
           memoryGame.pickedCards.forEach((card) => {
             card.classList.add('blocked');
             memoryGame.pickedCards = [];
-            document.getElementById('pairs-guessed').innerText = memoryGame.pairsGuessed;
           });
         }
       }
-      //document.getElementById('pairs-guessed').innerText = memoryGame.pairsClicked;
-      //document.getElementById('pairs-guessed').innerText = memoryGame.pairsGuessed;
+
+      document.getElementById('pairs-clicked').innerText = memoryGame.pairsClicked;
+      document.getElementById('pairs-guessed').innerText = memoryGame.pairsGuessed;
+      
+      if (memoryGame.checkIfFinished()) {
+        setTimeout(() => {
+          alert(`YOU WIN! \n\nYou found all pairs in ${memoryGame.pairsClicked} guesses`)
+        }, 1500)
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      }
     });
   });
 });
